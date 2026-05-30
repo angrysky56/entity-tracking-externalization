@@ -1,0 +1,23 @@
+
+### n_ops=8  (active: ['delta', 'direct', 'externalized']) ###
+         direct: acc=1.00 ghost=0.00 errs={'none': 6}
+          delta: acc=1.00 ghost=0.00 errs={'none': 6}
+   externalized: acc=1.00 ghost=0.00 errs={'none': 6}
+
+### n_ops=16  (active: ['delta', 'direct', 'externalized']) ###
+         direct: acc=0.50 ghost=0.00 errs={'none': 3, 'no_answer': 2, 'false_remove': 1}
+          delta: acc=0.67 ghost=0.33 errs={'none': 4, 'ghost': 2}
+   externalized: acc=0.83 ghost=0.00 errs={'none': 5, 'false_remove': 1}
+
+=== Competence frontier (highest n_ops at/above 60%) ===
+         direct: 8
+          delta: 16
+   externalized: 16
+
+=== Frontier shift vs direct (extra steps unlocked) ===
+          delta: +8
+   externalized: +8
+
+Interpretation: a positive shift = externalization lets the model handle longer traces than it can natively (capability extension). delta >= externalized would mean the minimal-edit format beats the verbose full-dump (format, not memory, was the bottleneck).
+
+Saved -> results/frontier-granite4.1-3b-20260530T175643Z.json

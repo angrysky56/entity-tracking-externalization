@@ -1,0 +1,3 @@
+Generated 20 tasks (n_ops=16). 4 cells x 40 trials each on deepseek-r1:latest.
+
+### reason_on (think=True, cap=4096) ###

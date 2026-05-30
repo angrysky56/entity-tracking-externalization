@@ -44,13 +44,43 @@ class Grade:
     error_type: str  # "none" | "no_answer" | "ghost" | "stale_or_wrong" | "false_remove"
 
 
+def salvage_from_trace(task: Task, text: str) -> str | None:
+    """Recover the query object's location from a *complete* step trace that
+    omitted the ANSWER line.
+
+    Only salvages when the trace reached the final step (a 'Step <n_ops>' line is
+    present); an incomplete/truncated trace stays None so it is honestly counted
+    as no_answer rather than graded on stale state. Handles both formats:
+      full-dump:  'Step 12: red box=apple; ...; nowhere=key, coin'
+      delta:      'Step 12: apple -> red box'   /   'apple -> nowhere'
+    """
+    n = len(task.ops)
+    obj = task.query_obj.lower()
+    lines = [l.strip() for l in (text or "").splitlines() if l.strip()]
+    step_re = re.compile(rf"step\s*{n}\b(.*)", re.IGNORECASE)
+    final = next((m.group(1) for l in reversed(lines) if (m := step_re.match(l))), None)
+    if final is None:
+        return None
+    seg = final.lower()
+    # delta format: "<obj> -> <loc>"
+    m = re.search(rf"{re.escape(obj)}\s*->\s*([^;,\n]+)", seg)
+    if m:
+        return normalize(m.group(1))
+    # full-dump: object appears under a "container=...obj..." or "nowhere=...obj..."
+    for chunk in seg.split(";"):
+        if "=" in chunk and obj in chunk:
+            loc = chunk.split("=", 1)[0].strip()
+            return NOWHERE if loc == "nowhere" else normalize(loc)
+    return None
+
+
 def grade(task: Task, response_text: str) -> Grade:
     """Grade a response and label the error type for wrong answers.
 
     Error types
     -----------
     none          : correct.
-    no_answer     : no parseable ANSWER line.
+    no_answer     : no parseable ANSWER line and no salvageable complete trace.
     ghost         : truth is NOWHERE (object was removed) but model named a
                     container -> the predicted failure of the fragile REMOVE tag
                     (removed object reported as still present).
@@ -59,6 +89,10 @@ def grade(task: Task, response_text: str) -> Grade:
     stale_or_wrong: named the wrong container (stale location / contamination).
     """
     pred = extract_answer(response_text)
+    if pred is None:
+        # No ANSWER line: try to recover from a completed step trace before
+        # giving up, so a verbose-but-finished response is not lost as no_answer.
+        pred = salvage_from_trace(task, response_text)
     truth = normalize(task.answer)
 
     if pred is None:

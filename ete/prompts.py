@@ -57,7 +57,29 @@ def build_externalized_prompt(task: Task) -> str:
     )
 
 
+def build_delta_prompt(task: Task) -> str:
+    """Delta condition: write only what *changed* each step (Turing-Program style).
+
+    Unlike the full-dump externalized prompt, this tracks just the moving object
+    per step, so transcription surface is O(steps) not O(steps x containers).
+    Literature (Turing Programs, dynamic-masking scratchpads) finds this minimal-
+    edit format generalizes better and injects fewer errors — it isolates "use
+    external memory" from "re-state the whole world every step".
+    """
+    return (
+        f"{_COMMON_RULES}\n\n"
+        f"Steps:\n{task.render_ops()}\n\n"
+        f"Track only the {task.query_obj}. After each numbered step, write one line:\n"
+        f"  Step <n>: {task.query_obj} -> <its container now, or 'nowhere'>\n"
+        f"Only update when the step affects the {task.query_obj}; otherwise repeat "
+        "its current location. Ignore all other objects.\n\n"
+        f"After the final step, answer: Where is the {task.query_obj} at the end?\n"
+        f"{_ANSWER_SPEC}"
+    )
+
+
 CONDITIONS: dict[str, "callable"] = {
     "direct": build_direct_prompt,
     "externalized": build_externalized_prompt,
+    "delta": build_delta_prompt,
 }

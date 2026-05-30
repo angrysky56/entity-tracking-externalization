@@ -29,6 +29,7 @@ class OllamaBackend:
         num_ctx: int = 8192,
         num_predict: int = 1024,
         timeout: float = 180.0,
+        think: bool | None = None,
     ) -> None:
         self.model = model
         self.host = host.rstrip("/")
@@ -36,24 +37,32 @@ class OllamaBackend:
         self.num_ctx = num_ctx
         self.num_predict = num_predict
         self.timeout = timeout
+        # think: None -> omit (model default); True/False -> explicit toggle.
+        # For deepseek-r1/qwen3, False inserts a no_think token (reasoning off).
+        self.think = think
 
     def chat(self, prompt: str) -> str:
-        resp = httpx.post(
-            f"{self.host}/api/chat",
-            json={
-                "model": self.model,
-                "messages": [{"role": "user", "content": prompt}],
-                "stream": False,
-                "options": {
-                    "temperature": self.temperature,
-                    "num_ctx": self.num_ctx,
-                    "num_predict": self.num_predict,
-                },
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "stream": False,
+            "options": {
+                "temperature": self.temperature,
+                "num_ctx": self.num_ctx,
+                "num_predict": self.num_predict,
             },
-            timeout=self.timeout,
-        )
+        }
+        if self.think is not None:
+            payload["think"] = self.think
+        resp = httpx.post(f"{self.host}/api/chat", json=payload, timeout=self.timeout)
         resp.raise_for_status()
-        return resp.json()["message"]["content"]
+        msg = resp.json().get("message", {})
+        content = (msg.get("content") or "").strip()
+        if content:
+            return content
+        # Reasoning-on with an empty content field: the answer may be only in
+        # the separated `thinking` field. Fall back so grading still works.
+        return (msg.get("thinking") or "").strip()
 
     def available_models(self) -> list[str]:
         """Model names Ollama currently has pulled (for a friendly error)."""

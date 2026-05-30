@@ -1,5 +1,64 @@
 # Findings
 
+## Reasoning-toggle 2x2 — deepseek-r1:latest (in progress, 2026-05-30)
+
+**Design.** The real test of "can explicit externalization substitute for
+free-form reasoning, and could we switch reasoning off when it triggers?"
+deepseek-r1 (8.2B qwen3 distill) honors Ollama's `think: true|false`, unlike
+MiniMax-M2.7. Four cells on one task set: reasoning {on, off} x prompt {direct,
+externalized}. Runner: `twobytwo.py`. The toggle was verified working —
+`think=True` returns a separated `thinking` field + clean content;
+`think=False` returns content with zero thinking.
+
+**Decisive comparison:** `reason_off + externalized` (the proposal: scaffold
+replaces reasoning) vs `reason_on + direct` (native R1). If the former matches
+the latter, structured externalization can *replace* reasoning on this task
+class — switch reasoning off, keep accuracy, save the reasoning tokens.
+
+**Cost reality (measured).** A single reason-on trial at n_ops=16 took **~150 s**
+on the RTX 3060 (eval_count≈557, `done_reason=stop` — a clean ~1900-char trace,
+**not** a runaway loop; just slow). That makes large reason-on runs impractical
+locally: 40 trials/cell x 2 reasoning-on cells ≈ 3+ hours. Pilot runs use small
+n_tasks. This is itself a finding: **R1-style reasoning is ~100x the wall-clock
+cost of a direct answer**, so if the scaffold can replace it, the token/latency
+savings are large — which is the whole point of the "switch reasoning off"
+strategy.
+
+### Pilot result — n=6 only, UNDERPOWERED, direction-hint not a conclusion
+
+deepseek-r1:latest, n_tasks=6 (12 trials/cell), n_ops=12, remove_prob=0.45,
+temp=0, cap 3072/1536. At n=6 a single task flip = 0.17 and a "0.33 ghost rate"
+is 2 of 6 items — treat everything below as a hint to be confirmed at n>=30.
+
+| | direct | externalized |
+|--|--|--|
+| reason_on | 0.67 | 0.67 |
+| reason_off | **0.83** | 0.67 |
+
+Hints, all tentative:
+
+1. **Reasoning did not help and slightly hurt** (reason_on direct 0.67 <
+   reason_off direct 0.83). Both reason_on cells had 2 `no_answer` — R1's trace
+   sometimes ran long and never emitted a clean ANSWER line (grading/cap
+   artifact, partly).
+2. **Externalization HURT on R1** — opposite of granite. reason_off direct 0.83
+   → externalized 0.67, and the externalized cell produced **2 ghost errors**
+   (the REMOVE-failure signature) that the direct cell did not. So on this more
+   capable model the rigid external-state format appears to *interfere* rather
+   than scaffold — consistent with the "don't externalize above the ceiling"
+   lesson, but now sharper: externalization is not free, it can inject errors.
+3. The "CAN replace reasoning" flag fired only because native reasoning was
+   weak (0.67), not because the scaffold was strong.
+
+**Caveats / fixes applied.** The original n=20 run was abandoned: R1 reasoning is
+~150 s/trial, so 160 trials ≈ 3+ h locally. The 2x2 runner was patched to save
+raw transcripts (it previously saved only summaries, so these ghost errors could
+not be audited — a real gap). Next run needs n>=30 and transcript inspection to
+tell real tracking ghosts from format artifacts before any of the above is
+trusted.
+
+---
+
 ## Difficulty staircase — granite4.1:3b (2026-05-30): externalization is a capability *extender*
 
 The decisive run. Both conditions swept across trace length (n_ops), objects/

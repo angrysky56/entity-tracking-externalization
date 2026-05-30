@@ -1,0 +1,23 @@
+Generated 6 tasks (n_ops=12). 4 cells x 12 trials each on deepseek-r1:latest.
+
+### reason_on (think=True, cap=3072) ###
+              reason_on+direct: acc=0.67 removed=1.00 ghost=0.00 errs={'none': 4, 'no_answer': 2}
+        reason_on+externalized: acc=0.67 removed=1.00 ghost=0.00 errs={'none': 4, 'no_answer': 2}
+
+### reason_off (think=False, cap=1536) ###
+             reason_off+direct: acc=0.83 removed=1.00 ghost=0.00 errs={'none': 5, 'false_remove': 1}
+       reason_off+externalized: acc=0.67 removed=0.33 ghost=0.33 errs={'none': 4, 'ghost': 2}
+
+=== 2x2 accuracy grid ===
+                 direct   externalized
+   reason_on       0.67           0.67
+  reason_off       0.83           0.67
+
+=== reads ===
+  native (reason_on+direct)          : 0.67
+  proposal (reason_off+externalized) : 0.67  => CAN replace reasoning
+  both (reason_on+externalized)      : 0.67  => scaffold no gain over reasoning-direct
+  reasoning-only lift (on-off, direct): -0.17
+  scaffold-only lift (ext-direct, off): -0.17
+
+Saved -> results/twobytwo-deepseek-r1-latest-20260530T082038Z.json

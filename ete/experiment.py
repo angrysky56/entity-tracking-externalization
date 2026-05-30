@@ -46,8 +46,13 @@ def run(
     tasks: list[Task],
     conditions: list[str] | None = None,
     progress: bool = True,
+    verbose: bool = False,
 ) -> list[Record]:
-    """Run every condition over every task; return flat trial records."""
+    """Run every condition over every task; return flat trial records.
+
+    verbose: also echo each full model response to stdout (the reasoning trace
+    and/or state rewrite), so the terminal shows what the model actually wrote.
+    """
     conditions = conditions or list(CONDITIONS)
     records: list[Record] = []
     total = len(tasks) * len(conditions)
@@ -75,7 +80,14 @@ def run(
                 )
             )
             done += 1
-            if progress:
+            if verbose:
+                print(f"\n{'='*70}\n[{done}/{total}] task {idx} / {cond}  "
+                      f"(truth={g.truth}, removed_query={task.query_obj_removed})",
+                      flush=True)
+                print(f"--- model output ---\n{text}", flush=True)
+                print(f"--- graded: {'OK' if g.correct else g.error_type} "
+                      f"(predicted={g.predicted}) ---", flush=True)
+            elif progress:
                 print(f"  [{done}/{total}] task {idx} / {cond} -> "
                       f"{'OK' if g.correct else g.error_type}", flush=True)
     return records

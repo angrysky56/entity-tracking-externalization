@@ -33,6 +33,12 @@ CONTAINERS = [
     "white crate", "brown bag", "gray bin",
 ]
 
+# Confusable object names for the contamination stressor: shared stem + index,
+# so the model must disambiguate near-identical tokens. arXiv:2605.30233 predicts
+# similar entities cross-contaminate, so this ramps difficulty toward the actual
+# failure mode rather than just adding generic length.
+SIMILAR_OBJECTS = [f"widget {i}" for i in range(1, 16)]
+
 
 @dataclass
 class Op:
@@ -74,6 +80,7 @@ def generate_task(
     n_containers: int = 3,
     remove_prob: float = 0.25,
     seed: int = 0,
+    similar_names: bool = False,
 ) -> Task:
     """Generate one task with a deterministically tracked final state.
 
@@ -84,8 +91,11 @@ def generate_task(
         n_containers: distinct containers in play.
         remove_prob: probability an eligible step is a REMOVE.
         seed: recorded on the task for traceability.
+        similar_names: draw objects from the confusable pool (contamination
+            stressor) instead of the distinct pool.
     """
-    objects = rng.sample(OBJECTS, k=n_objects)
+    pool = SIMILAR_OBJECTS if similar_names else OBJECTS
+    objects = rng.sample(pool, k=min(n_objects, len(pool)))
     containers = rng.sample(CONTAINERS, k=n_containers)
 
     # location[obj] = container name or NOWHERE (not yet placed / removed)
