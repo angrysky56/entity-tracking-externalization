@@ -1,0 +1,134 @@
+Generated 60 tasks. Running 2 conditions on granite4.1:3b (ollama) ...
+  [1/120] task 0 / direct -> stale_or_wrong
+  [2/120] task 0 / externalized -> OK
+  [3/120] task 1 / direct -> OK
+  [4/120] task 1 / externalized -> OK
+  [5/120] task 2 / direct -> false_remove
+  [6/120] task 2 / externalized -> OK
+  [7/120] task 3 / direct -> no_answer
+  [8/120] task 3 / externalized -> OK
+  [9/120] task 4 / direct -> OK
+  [10/120] task 4 / externalized -> OK
+  [11/120] task 5 / direct -> OK
+  [12/120] task 5 / externalized -> OK
+  [13/120] task 6 / direct -> OK
+  [14/120] task 6 / externalized -> OK
+  [15/120] task 7 / direct -> no_answer
+  [16/120] task 7 / externalized -> OK
+  [17/120] task 8 / direct -> OK
+  [18/120] task 8 / externalized -> OK
+  [19/120] task 9 / direct -> OK
+  [20/120] task 9 / externalized -> OK
+  [21/120] task 10 / direct -> OK
+  [22/120] task 10 / externalized -> OK
+  [23/120] task 11 / direct -> OK
+  [24/120] task 11 / externalized -> OK
+  [25/120] task 12 / direct -> OK
+  [26/120] task 12 / externalized -> OK
+  [27/120] task 13 / direct -> OK
+  [28/120] task 13 / externalized -> OK
+  [29/120] task 14 / direct -> ghost
+  [30/120] task 14 / externalized -> OK
+  [31/120] task 15 / direct -> OK
+  [32/120] task 15 / externalized -> OK
+  [33/120] task 16 / direct -> false_remove
+  [34/120] task 16 / externalized -> false_remove
+  [35/120] task 17 / direct -> false_remove
+  [36/120] task 17 / externalized -> OK
+  [37/120] task 18 / direct -> OK
+  [38/120] task 18 / externalized -> OK
+  [39/120] task 19 / direct -> no_answer
+  [40/120] task 19 / externalized -> OK
+  [41/120] task 20 / direct -> OK
+  [42/120] task 20 / externalized -> OK
+  [43/120] task 21 / direct -> no_answer
+  [44/120] task 21 / externalized -> OK
+  [45/120] task 22 / direct -> false_remove
+  [46/120] task 22 / externalized -> OK
+  [47/120] task 23 / direct -> OK
+  [48/120] task 23 / externalized -> OK
+  [49/120] task 24 / direct -> ghost
+  [50/120] task 24 / externalized -> OK
+  [51/120] task 25 / direct -> OK
+  [52/120] task 25 / externalized -> OK
+  [53/120] task 26 / direct -> stale_or_wrong
+  [54/120] task 26 / externalized -> OK
+  [55/120] task 27 / direct -> stale_or_wrong
+  [56/120] task 27 / externalized -> stale_or_wrong
+  [57/120] task 28 / direct -> false_remove
+  [58/120] task 28 / externalized -> stale_or_wrong
+  [59/120] task 29 / direct -> OK
+  [60/120] task 29 / externalized -> OK
+  [61/120] task 30 / direct -> OK
+  [62/120] task 30 / externalized -> OK
+  [63/120] task 31 / direct -> no_answer
+  [64/120] task 31 / externalized -> OK
+  [65/120] task 32 / direct -> OK
+  [66/120] task 32 / externalized -> OK
+  [67/120] task 33 / direct -> OK
+  [68/120] task 33 / externalized -> OK
+  [69/120] task 34 / direct -> OK
+  [70/120] task 34 / externalized -> OK
+  [71/120] task 35 / direct -> OK
+  [72/120] task 35 / externalized -> OK
+  [73/120] task 36 / direct -> OK
+  [74/120] task 36 / externalized -> OK
+  [75/120] task 37 / direct -> OK
+  [76/120] task 37 / externalized -> OK
+  [77/120] task 38 / direct -> false_remove
+  [78/120] task 38 / externalized -> false_remove
+  [79/120] task 39 / direct -> OK
+  [80/120] task 39 / externalized -> OK
+  [81/120] task 40 / direct -> ghost
+  [82/120] task 40 / externalized -> OK
+  [83/120] task 41 / direct -> OK
+  [84/120] task 41 / externalized -> OK
+  [85/120] task 42 / direct -> OK
+  [86/120] task 42 / externalized -> OK
+  [87/120] task 43 / direct -> no_answer
+  [88/120] task 43 / externalized -> OK
+  [89/120] task 44 / direct -> ghost
+  [90/120] task 44 / externalized -> OK
+  [91/120] task 45 / direct -> OK
+  [92/120] task 45 / externalized -> OK
+  [93/120] task 46 / direct -> OK
+  [94/120] task 46 / externalized -> OK
+  [95/120] task 47 / direct -> OK
+  [96/120] task 47 / externalized -> OK
+  [97/120] task 48 / direct -> OK
+  [98/120] task 48 / externalized -> stale_or_wrong
+  [99/120] task 49 / direct -> OK
+  [100/120] task 49 / externalized -> OK
+  [101/120] task 50 / direct -> OK
+  [102/120] task 50 / externalized -> OK
+  [103/120] task 51 / direct -> OK
+  [104/120] task 51 / externalized -> OK
+  [105/120] task 52 / direct -> OK
+  [106/120] task 52 / externalized -> false_remove
+  [107/120] task 53 / direct -> false_remove
+  [108/120] task 53 / externalized -> stale_or_wrong
+  [109/120] task 54 / direct -> OK
+  [110/120] task 54 / externalized -> OK
+  [111/120] task 55 / direct -> OK
+  [112/120] task 55 / externalized -> OK
+  [113/120] task 56 / direct -> OK
+  [114/120] task 56 / externalized -> OK
+  [115/120] task 57 / direct -> OK
+  [116/120] task 57 / externalized -> OK
+  [117/120] task 58 / direct -> OK
+  [118/120] task 58 / externalized -> OK
+  [119/120] task 59 / direct -> OK
+  [120/120] task 59 / externalized -> OK
+
+=== Accuracy by condition ===
+       direct: overall 0.67 | removed-query 0.63 | present-query 0.70 | ghost 0.07
+ externalized: overall 0.88 | removed-query 0.83 | present-query 0.93 | ghost 0.00
+
+=== Headline contrast (externalized - direct) ===
+  gain on removed-query items : +0.20
+  gain on present-query items : +0.23
+  ghost rate  direct -> ext   : 0.07 -> 0.00
+
+Larger gain on removed-query items + ghost-rate drop => externalization routes around the fragile REMOVE tag (recombination-OOD, no retraining needed). Similar gains across subsets => the failure is preserved, pointing to capability-OOD.
+
+Saved raw results + summary -> results/results-granite4.1-3b-20260530T030552Z.json

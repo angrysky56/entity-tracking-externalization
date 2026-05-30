@@ -1,0 +1,25 @@
+
+### n_ops=8 (20 tasks, 40 trials) ###
+  direct=0.75  ext=0.90  gain=+0.15  | ghost 0.00->0.05
+
+### n_ops=16 (20 tasks, 40 trials) ###
+  direct=0.65  ext=0.85  gain=+0.20  | ghost 0.00->0.05
+
+### n_ops=24 (20 tasks, 40 trials) ###
+  direct=0.40  ext=0.80  gain=+0.40  | ghost 0.00->0.05
+
+### n_ops=32 (20 tasks, 40 trials) ###
+  direct=0.40  ext=0.90  gain=+0.50  | ghost 0.00->0.00
+
+### n_ops=40 (20 tasks, 40 trials) ###
+  direct=0.45  ext=0.75  gain=+0.30  | ghost 0.05->0.00
+
+=== Difficulty staircase ===
+ n_ops  direct     ext    gain  d_ghost  e_ghost
+     8    0.75    0.90   +0.15     0.00     0.05
+    16    0.65    0.85   +0.20     0.00     0.05
+    24    0.40    0.80   +0.40     0.00     0.05
+    32    0.40    0.90   +0.50     0.00     0.00
+    40    0.45    0.75   +0.30     0.05     0.00
+
+Saved -> results/sweep-granite4.1-3b-20260530T040447Z.json

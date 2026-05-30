@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# uv
+uv.lock
+
+# experiment output
+results/
+*.json
+!*/package.json

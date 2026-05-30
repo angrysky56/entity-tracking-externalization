@@ -1,0 +1,42 @@
+Generated 14 tasks. Running 2 conditions on granite4.1:3b (ollama) ...
+  [1/28] task 0 / direct -> stale_or_wrong
+  [2/28] task 0 / externalized -> OK
+  [3/28] task 1 / direct -> OK
+  [4/28] task 1 / externalized -> OK
+  [5/28] task 2 / direct -> false_remove
+  [6/28] task 2 / externalized -> OK
+  [7/28] task 3 / direct -> no_answer
+  [8/28] task 3 / externalized -> OK
+  [9/28] task 4 / direct -> OK
+  [10/28] task 4 / externalized -> OK
+  [11/28] task 5 / direct -> OK
+  [12/28] task 5 / externalized -> OK
+  [13/28] task 6 / direct -> OK
+  [14/28] task 6 / externalized -> OK
+  [15/28] task 7 / direct -> no_answer
+  [16/28] task 7 / externalized -> OK
+  [17/28] task 8 / direct -> OK
+  [18/28] task 8 / externalized -> OK
+  [19/28] task 9 / direct -> OK
+  [20/28] task 9 / externalized -> OK
+  [21/28] task 10 / direct -> OK
+  [22/28] task 10 / externalized -> OK
+  [23/28] task 11 / direct -> OK
+  [24/28] task 11 / externalized -> OK
+  [25/28] task 12 / direct -> OK
+  [26/28] task 12 / externalized -> OK
+  [27/28] task 13 / direct -> OK
+  [28/28] task 13 / externalized -> OK
+
+=== Accuracy by condition ===
+       direct: overall 0.71 | removed-query 0.71 | present-query 0.71 | ghost 0.00
+ externalized: overall 1.00 | removed-query 1.00 | present-query 1.00 | ghost 0.00
+
+=== Headline contrast (externalized - direct) ===
+  gain on removed-query items : +0.29
+  gain on present-query items : +0.29
+  ghost rate  direct -> ext   : 0.00 -> 0.00
+
+Larger gain on removed-query items + ghost-rate drop => externalization routes around the fragile REMOVE tag (recombination-OOD, no retraining needed). Similar gains across subsets => the failure is preserved, pointing to capability-OOD.
+
+Saved raw results + summary -> results/results-granite4.1-3b-20260530T025619Z.json
