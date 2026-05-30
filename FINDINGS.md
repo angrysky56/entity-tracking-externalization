@@ -1,6 +1,68 @@
 # Findings
 
-## Reasoning-toggle 2x2 — deepseek-r1:latest (in progress, 2026-05-30)
+## PRIMARY RESULT — competence-frontier sweep, granite4.1:3b (2026-05-30)
+
+The methodologically sound run; supersedes the fixed-difficulty pilots below.
+Metric is the **competence frontier** — highest n_ops a condition still solves
+at >=60% — and the **frontier shift** vs direct. Three prompt formats:
+`direct`, `delta` (track only the query object), `externalized` (full state
+dump every step). n=20/rung, ladder 8..36, remove_prob=0.45, temp=0,
+distinct names. `frontier.py`.
+
+### Frontier
+| condition | frontier (n_ops @>=60%) | shift vs direct |
+|--|--|--|
+| direct | 16 | — |
+| delta | 36 | +20 |
+| externalized | **36+ (never broke)** | **+20, and counting** |
+
+### Full curves (the headline understates externalized)
+| n_ops | direct | delta | externalized |
+|------|--------|-------|--------------|
+| 8 | 0.75 | 1.00 | 1.00 |
+| 12 | 0.70 | 0.85 | 0.95 |
+| 16 | 0.65 | 0.60 (ghost 0.35) | 0.90 |
+| 24 | 0.40 | 0.75 (ghost 0.15) | 0.85 |
+| 36 | — | 0.65 (ghost 0.15) | **0.90 (ghost 0.00)** |
+
+### Three conclusions (n=20/rung — solid, with normal sampling caveats)
+
+1. **Externalization extends the competence frontier by 20+ steps and the true
+   ceiling is past the ladder.** Externalized stayed 0.85–1.00 across the entire
+   range and never declined — its frontier is >36; the sweep ran out of rungs
+   before it broke. The +20 figure is a floor, not the effect size.
+
+2. **Format matters as much as externalizing — and completeness beats brevity
+   for REMOVE.** This inverts the Turing-Programs "minimal edits generalize
+   better" prior *for this failure mode*. `delta` (track only the query object)
+   develops a serious ghost problem (0.35 at n_ops=16, persisting ~0.15);
+   `externalized` (full dump) has **zero ghosts at every rung**. Mechanism: by
+   discarding the other objects' state, delta has no written record that a
+   REMOVE happened, so suppression silently fails and the removed object is
+   reported present — the exact fragile-REMOVE ghost. The full dump writes
+   "nowhere=..." every step, which *is* an externalized removal record, so the
+   tag cannot silently fail. **Design lesson: to fix REMOVE, externalize the
+   removal itself; keep complete state, not just the queried slot.**
+
+3. **Direct fails partly by not answering at all.** `no_answer` is 9 of 12
+   direct errors at n_ops=24 — on long traces direct increasingly fails to
+   commit to an answer, not only tracks wrong. (Salvage only fires on completed
+   step-traces; direct has none, so these are real non-answers.) This means the
+   direct frontier is partly a format-refusal artifact, which slightly softens
+   the comparison but does not change the ordering.
+
+### Caveats
+- Synthetic state-tracking task. It is the right *kind* of probe (the
+  length-generalization literature uses exactly these toy state-trackers), but
+  the specific +20 is about this task class, not a transfer claim to real tasks.
+- n=20/rung: a 0.05 swing is one task. The *ordering* (ext > delta > direct) and
+  the ghost contrast are robust; exact frontier rungs are +/- one ladder step.
+- Not yet run with `--similar-names` (contamination stressor) or on a reasoning
+  model under the frontier metric — both are the obvious next steps.
+
+---
+
+## Reasoning-toggle 2x2 — deepseek-r1:latest (2026-05-30, superseded by frontier method)
 
 **Design.** The real test of "can explicit externalization substitute for
 free-form reasoning, and could we switch reasoning off when it triggers?"
