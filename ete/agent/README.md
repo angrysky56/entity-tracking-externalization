@@ -29,7 +29,7 @@ operations ─▶ TrackingAgent (engine, domain-independent)
   slot. Removal = move to `nowhere`, so the representation can never silently
   drop an entity. The anti-ghost rule is a type invariant, not a prompt plea.
 - **TrackingAgent** (`core.py`): the universal engine. Forces full re-emission
-  each step; the *completeness check* (no entity from the prior step missing) is
+  each step; the _completeness check_ (no entity from the prior step missing) is
   the runtime anti-ghost guard; `repair_incomplete` re-adds any dropped entity
   to `nowhere` rather than letting it vanish.
 - **Domain** (`domain.py` Protocol): what a problem supplies — rules text, slot
@@ -46,8 +46,8 @@ operations ─▶ TrackingAgent (engine, domain-independent)
 
 ## Generalization, demonstrated
 
-`domains.py` ships two structurally different problems tracked by the *same
-engine*:
+`domains.py` ships two structurally different problems tracked by the _same
+engine_:
 
 - `ContainerDomain` — objects in containers (the original task).
 - `VariableDomain` — variables holding values (slots hold ≤1 entity, entities
@@ -65,8 +65,13 @@ uv run python -m ete.agent.smoke --model granite4.1:3b   # live, both domains
 
 ## Scope
 
-The completeness guard makes ghosts *structurally impossible to hide*, but
+The completeness guard makes ghosts _structurally impossible to hide_, but
 schema enforcement constrains shape, not truth — a wrong transition is still
 wrong. That is why `verify=True` + a deterministic `reduce()` matters: it is the
 only thing that certifies a transition correct. For domains with no closed-form
 reducer, the agent still runs (completeness-enforced) but traces are unverified.
+
+## Wiki
+
+Full project analysis, findings, and cross-links →
+[entity-tracking-externalization](https://github.com/angrysky56/LLM-WIKI/wiki/entities/projects/entity-tracking-externalization)
